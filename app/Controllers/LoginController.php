@@ -14,7 +14,11 @@ class LoginController extends Controller
             $password = $_POST['password'] ?? '';
             // Placeholder: Accept only a specific email/password for demo
             if ($email === 'admin@example.com' && $password === 'pass145&22') {
-                header('Location: /home');
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+                $_SESSION['is_admin'] = true;
+                header('Location: /admin');
                 exit;
             } else {
                 $error = 'Invalid email or password.';
