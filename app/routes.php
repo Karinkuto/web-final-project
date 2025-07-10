@@ -11,6 +11,7 @@ $router->get('/products/{:id}', 'ProductController@show');
 $router->get('/cart', 'CartController@index');
 $router->get('/login', 'LoginController@showLoginForm');
 $router->post('/login', 'LoginController@showLoginForm');
+$router->get('/logout', 'LoginController@logout');
 $router->get('/admin', 'AdminController@dashboard');
 $router->get('/admin/products', 'AdminController@productList');
 $router->get('/admin/products/add', 'AdminController@addProduct');
