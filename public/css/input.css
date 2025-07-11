@@ -140,7 +140,19 @@ html {
   }
 
   .color-swatch {
-    @apply h-4 w-4 rounded-full border border-gray-300;
+    @apply h-8 w-8 rounded-full border-2 border-gray-200 transition-all duration-200 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-gray-400;
+    box-sizing: border-box;
+  }
+  .color-option input:checked + .color-swatch {
+    @apply ring-2 ring-offset-2 ring-gray-600;
+    border-color: rgb(var(--color-primary));
+  }
+  .color-option input:focus + .color-swatch {
+    @apply ring-2 ring-offset-2 ring-gray-400;
+  }
+  .color-option input:focus-visible + .color-swatch {
+    outline: 2px solid rgb(var(--color-primary));
+    outline-offset: 2px;
   }
 
   /* Button styles */
@@ -255,12 +267,27 @@ html {
   }
 
   .color-swatch {
-    @apply h-6 w-6 rounded-full border border-gray-200 cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-secondary/30 transition-all;
+    @apply h-8 w-8 rounded-full border-2 border-gray-200 cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-gray-400 transition-all duration-200;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+  }
+
+  .color-option input:checked + .color-swatch {
+    @apply ring-2 ring-offset-2 ring-gray-600;
+    border-color: rgb(var(--color-primary));
+  }
+
+  .color-option input:focus + .color-swatch {
+    @apply ring-2 ring-offset-2 ring-gray-400;
+  }
+
+  .color-option input:focus-visible + .color-swatch {
+    outline: 2px solid rgb(var(--color-primary));
+    outline-offset: 2px;
   }
 
   .color-swatch-white {
-    @apply border-gray-200;
+    @apply border-gray-200 bg-white;
   }
 
   .material-option {
@@ -310,19 +337,19 @@ html {
   }
 
   .product-tab-btn {
-    @apply border-b-2 whitespace-nowrap py-4 px-1 text-sm font-medium;
+    @apply border-b-2 whitespace-nowrap py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 border-transparent hover:border-gray-300 transition-colors outline-none;
+    margin-bottom: -1px;
   }
 
-  .product-tab-btn.active {
-    @apply border-secondary text-secondary;
+  .product-tab-btn.active,
+  .product-tab-btn[aria-selected="true"] {
+    @apply text-primary border-primary;
+    color: rgb(var(--color-primary));
+    border-color: rgb(var(--color-primary));
   }
 
   .product-tab-panel {
     @apply py-6;
-  }
-
-  .product-tab-panel.active {
-    @apply block;
   }
 
   .product-tab-panel:not(.active) {
