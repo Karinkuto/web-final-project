@@ -39,21 +39,23 @@ if ($originalPrice > 0 && $price < $originalPrice) {
 }
 ?>
 
-<div class="card <?= htmlspecialchars($class, ENT_QUOTES, 'UTF-8') ?>">
+<div class="card <?= htmlspecialchars($class, ENT_QUOTES, 'UTF-8') ?>" onclick="if(!event.target.closest('a, button, [role=button]')) window.location='<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>'" style="cursor: pointer;">
     <!-- Image Container -->
     <div class="card-image-container">
         <!-- Main Image -->
-        <a href="<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>" class="block h-full w-full">
+        <div class="h-full w-full">
             <?php if (!empty($image)): ?>
-                <img src="<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>"
-                    class="card-image">
+                <div class="block h-full w-full">
+                    <img src="<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8') ?>"
+                        alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>"
+                        class="card-image w-full h-full object-cover">
+                </div>
             <?php else: ?>
                 <div class="h-full w-full bg-gray-200 flex items-center justify-center">
                     <span class="text-gray-400">No image</span>
                 </div>
             <?php endif; ?>
-        </a>
+        </div>
 
         <!-- Badges -->
         <div class="card-badge">
@@ -91,10 +93,7 @@ if ($originalPrice > 0 && $price < $originalPrice) {
         <?php endif; ?>
 
         <h3 class="card-title">
-            <a href="<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>">
-                <span aria-hidden="true" class="absolute inset-0"></span>
-                <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
-            </a>
+            <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
         </h3>
 
         <!-- Price -->
@@ -148,11 +147,12 @@ if ($originalPrice > 0 && $price < $originalPrice) {
                         <form action="<?= htmlspecialchars($action['url'] ?? '#', ENT_QUOTES, 'UTF-8') ?>" 
                               method="POST" 
                               class="flex-1"
-                              onsubmit="return confirm('<?= htmlspecialchars($action['confirm'] ?? 'Are you sure?', ENT_QUOTES, 'UTF-8') ?>');">
+                              onsubmit="event.stopPropagation(); return confirm('<?= htmlspecialchars($action['confirm'] ?? 'Are you sure?', ENT_QUOTES, 'UTF-8') ?>');">
                             <?php if (isset($action['method']) && strtoupper($action['method']) !== 'POST'): ?>
                                 <input type="hidden" name="_method" value="<?= htmlspecialchars($action['method'], ENT_QUOTES, 'UTF-8') ?>">
                             <?php endif; ?>
                             <button type="submit" 
+                                    onclick="event.stopPropagation();"
                                     class="w-full inline-flex justify-center items-center px-4 py-2 border <?= $action['variant'] === 'danger' ? 'border-transparent text-white bg-[rgb(var(--color-accent))] hover:bg-[rgba(var(--color-accent),0.9)]' : 'border-[rgb(var(--color-border))] text-[rgb(var(--color-primary))] bg-[rgb(var(--color-surface))] hover:bg-[rgba(var(--color-primary),0.05)]' ?> rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--color-accent))] transition-colors">
                                 <?php if (!empty($action['icon'])): ?>
                                     <span class="mr-2"><?= $action['icon'] ?></span>
@@ -162,6 +162,7 @@ if ($originalPrice > 0 && $price < $originalPrice) {
                         </form>
                     <?php else: ?>
                         <a href="<?= htmlspecialchars($action['url'] ?? '#', ENT_QUOTES, 'UTF-8') ?>" 
+                           onclick="event.stopPropagation();"
                            class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-[rgb(var(--color-border))] rounded-lg text-sm font-medium text-[rgb(var(--color-primary))] bg-[rgb(var(--color-surface))] hover:bg-[rgba(var(--color-primary),0.03)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--color-accent))] transition-colors">
                             <?php if (!empty($action['icon'])): ?>
                                 <span class="mr-2"><?= $action['icon'] ?></span>

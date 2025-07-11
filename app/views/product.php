@@ -19,7 +19,7 @@
         <div class="product-gallery-container">
             <div class="product-gallery">
                 <img id="main-image" 
-                     src="<?= htmlspecialchars($product['images'][0] ?? '/path/to/placeholder-image.jpg') ?>" 
+                     src="<?= htmlspecialchars(is_array($product['image_url'] ?? '') ? $product['image_url'][0] : ($product['image_url'] ?? '/images/placeholder.jpg')) ?>" 
                      alt="<?= htmlspecialchars($product['name']) ?>" 
                      class="product-image"
                      loading="eager">
@@ -78,34 +78,49 @@
                 </div>
             </div>
 
-            <!-- Variants -->
-            <?php if (!empty($product['colors']) || !empty($product['materials']) || !empty($product['sizes'])): ?>
-                <div class="product-variants">
-                    <?php if (!empty($product['colors'])): ?>
-                        <div>
-                            <h3 class="variant-label">Color</h3>
-                            <div class="variant-options">
-                                <?php foreach ($product['colors'] as $color): ?>
-                                    <label class="color-option">
-                                        <input type="radio" 
-                                               name="color" 
-                                               value="<?= htmlspecialchars($color['value']) ?>" 
-                                               class="sr-only" 
-                                               <?= $color === ($product['colors'][0] ?? null) ? 'checked' : '' ?> 
-                                               aria-labelledby="color-choice-<?= htmlspecialchars($color['value']) ?>-label">
-                                        <span id="color-choice-<?= htmlspecialchars($color['value']) ?>-label" class="sr-only">
-                                            <?= htmlspecialchars($color['name']) ?>
-                                        </span>
-                                        <span class="color-swatch <?= str_contains(strtolower($color['name']), 'white') ? 'color-swatch-white' : '' ?>" 
-                                              style="background-color: <?= $color['value'] ?>">
-                                            <span class="sr-only"><?= htmlspecialchars($color['name']) ?></span>
-                                        </span>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
+            <!-- Color Swatches -->
+            <?php if (!empty($product['colors'])): ?>
+                <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-900">Color</h3>
+                    <fieldset class="mt-2">
+                        <legend class="sr-only">Choose a color</legend>
+                        <div class="flex items-center space-x-3">
+                            <?php
+                            $colors = is_string($product['colors'] ?? '') ? json_decode($product['colors'], true) : ($product['colors'] ?? []);
+                            if (is_array($colors) && !empty($colors)) {
+                                foreach ($colors as $index => $color): 
+                                    $colorValue = is_array($color) ? ($color['value'] ?? '') : $color;
+                                    $colorName = is_array($color) ? ($color['name'] ?? '') : $color;
+                                    $isWhite = is_string($colorName) && (stripos($colorName, 'white') !== false || $colorValue === '#ffffff' || $colorValue === '#fff');
+                            ?>
+                                <label class="color-option relative -m-0.5 flex items-center justify-center rounded-full p-0.5 focus:outline-none">
+                                    <input type="radio" 
+                                           name="color-choice" 
+                                           value="<?= htmlspecialchars($colorValue) ?>" 
+                                           class="sr-only" 
+                                           <?= $index === 0 ? 'checked' : '' ?> 
+                                           aria-labelledby="color-choice-<?= $index ?>-label">
+                                    <span id="color-choice-<?= $index ?>-label" class="sr-only">
+                                        <?= htmlspecialchars($colorName) ?>
+                                    </span>
+                                    <span class="color-swatch <?= $isWhite ? 'color-swatch-white' : '' ?>" 
+                                          style="background-color: <?= $colorValue ?>"
+                                          aria-hidden="true"
+                                          title="<?= htmlspecialchars($colorName) ?>">
+                                    </span>
+                                </label>
+                            <?php 
+                                endforeach;
+                            }
+                            ?>
                         </div>
-                    <?php endif; ?>
+                    </fieldset>
+                </div>
+            <?php endif; ?>
 
+            <!-- Variants -->
+            <?php if (!empty($product['materials']) || !empty($product['sizes'])): ?>
+                <div class="product-variants">
                     <?php if (!empty($product['materials'])): ?>
                         <div>
                             <h3 class="variant-label">Material</h3>
@@ -186,16 +201,30 @@
             </div>
 
             <!-- Product Information Tabs -->
-            <div class="product-tabs">
-                <div class="product-tabs-nav" role="tablist" aria-label="Product information">
+            <div class="product-tabs mt-12 border-t border-gray-200 pt-6">
+                <div class="product-tabs-nav flex border-b border-gray-200 mb-6" role="tablist" aria-label="Product information">
                     <button type="button" 
                             role="tab"
                             id="description-tab"
                             aria-controls="description-panel"
                             aria-selected="true"
-                            class="product-tab-btn active">
+                            data-tab-target="description-panel"
+                            class="product-tab-btn border-b-2 border-transparent py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none active"
+                            onclick="switchTab('description-panel', this)">
                         Description
                     </button>
+                    <?php if (!empty($product['materials']) || !empty($product['dimensions'])): ?>
+                        <button type="button" 
+                                role="tab"
+                                id="specs-tab"
+                                aria-controls="specs-panel"
+                                aria-selected="false"
+                                data-tab-target="specs-panel"
+                                class="product-tab-btn border-b-2 border-transparent py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none"
+                                onclick="switchTab('specs-panel', this)">
+                            Specifications
+                        </button>
+                    <?php endif; ?>
                     <?php if (!empty($product['dimensions'])): ?>
                         <button type="button" 
                                 role="tab"
@@ -222,23 +251,42 @@
                     <div id="description-panel" 
                          role="tabpanel"
                          aria-labelledby="description-tab"
-                         class="product-tab-panel active">
+                         class="product-tab-panel active py-6">
                         <div class="prose prose-sm max-w-none product-description">
                             <?= nl2br(htmlspecialchars($product['description'] ?? '')) ?>
-                            
-                            <?php if (!empty($product['features'])): ?>
-                                <ul class="mt-4 space-y-2">
-                                    <?php foreach ($product['features'] as $feature): ?>
-                                        <li class="flex items-start">
-                                            <svg class="h-5 w-5 text-secondary mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span><?= htmlspecialchars($feature) ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php endif; ?>
                         </div>
+                    </div>
+
+                    <!-- Specifications -->
+                    <div id="specs-panel" 
+                         role="tabpanel"
+                         aria-labelledby="specs-tab"
+                         class="product-tab-panel py-6"
+                         style="display: none;">
+                        <?php if (!empty($product['materials'])): ?>
+                            <div class="mb-6">
+                                <h4 class="text-lg font-medium mb-2">Materials</h4>
+                                <p class="text-gray-700">
+                                    <?php 
+                                    $materials = is_string($product['materials']) ? json_decode($product['materials'], true) : $product['materials'];
+                                    if (is_array($materials) && isset($materials[0]['name'])) {
+                                        echo htmlspecialchars(implode(', ', array_column($materials, 'name')));
+                                    } else if (is_array($materials)) {
+                                        echo htmlspecialchars(implode(', ', $materials));
+                                    } else {
+                                        echo htmlspecialchars($materials);
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($product['dimensions'])): ?>
+                            <div class="mb-6">
+                                <h4 class="text-lg font-medium mb-2">Dimensions</h4>
+                                <p class="text-gray-700"><?= htmlspecialchars($product['dimensions']) ?></p>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Dimensions -->
@@ -318,6 +366,41 @@
 </div>
 
 <script>
+    // Image gallery functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the first thumbnail as active
+        const firstThumbnail = document.querySelector('[data-thumbnail]');
+        if (firstThumbnail) {
+            firstThumbnail.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+        }
+    });
+    
+    function changeMainImage(src, thumbnail) {
+        // Update main image
+        const mainImage = document.getElementById('main-product-image');
+        if (mainImage) {
+            mainImage.style.opacity = '0';
+            setTimeout(() => {
+                mainImage.src = src;
+                mainImage.style.opacity = '1';
+            }, 150);
+        }
+        
+        // Update active thumbnail
+        document.querySelectorAll('[data-thumbnail]').forEach(thumb => {
+            thumb.classList.remove('ring-2', 'ring-primary', 'ring-offset-2');
+        });
+        
+        if (thumbnail) {
+            thumbnail.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+        }
+    }
+    
+    // Initialize first tab as active
+    document.addEventListener('DOMContentLoaded', function() {
+        switchTab('description-panel', document.querySelector('.product-tab-btn'));
+    });
+
     // Image gallery functionality
     function changeImage(src, clickedElement) {
         if (!clickedElement) return;

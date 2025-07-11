@@ -30,7 +30,7 @@ $title = $title ?? 'Admin Products';
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-[rgb(var(--color-surface))] rounded-xl shadow-sm p-6 border border-[rgb(var(--color-border))] hover:shadow-md transition-shadow duration-300">
                 <div class="flex items-center">
                     <div class="p-3 rounded-lg bg-[rgba(var(--color-secondary),0.1)] text-[rgb(var(--color-secondary))]">
@@ -44,7 +44,7 @@ $title = $title ?? 'Admin Products';
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-[rgb(var(--color-surface))] rounded-xl shadow-sm p-6 border border-[rgb(var(--color-border))] hover:shadow-md transition-shadow duration-300">
                 <div class="flex items-center">
                     <div class="p-3 rounded-lg bg-[rgba(var(--color-primary),0.1)] text-[rgb(var(--color-primary))]">
@@ -70,14 +70,14 @@ $title = $title ?? 'Admin Products';
                 </div>
                 <input type="text" id="search" name="search" class="block w-full pl-10 pr-3 py-2.5 border border-[rgb(var(--color-border))] rounded-xl bg-[rgb(var(--color-surface))] shadow-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-accent))] focus:border-[rgb(var(--color-accent))] text-sm text-[rgb(var(--color-primary))] placeholder-[rgba(var(--color-primary),0.5)]" placeholder="Search products...">
             </div>
-            
+
             <div class="flex space-x-3 w-full sm:w-auto">
                 <div class="relative">
                     <select id="category" name="category" class="appearance-none bg-[rgb(var(--color-surface))] border border-[rgb(var(--color-border))] rounded-xl pl-4 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-accent))] focus:border-[rgb(var(--color-accent))] text-[rgb(var(--color-primary))]">
                         <option>All Categories</option>
-                        <?php 
+                        <?php
                         $categories = array_unique(array_column($products, 'category'));
-                        foreach ($categories as $category): 
+                        foreach ($categories as $category):
                         ?>
                             <option><?= htmlspecialchars($category) ?></option>
                         <?php endforeach; ?>
@@ -88,8 +88,8 @@ $title = $title ?? 'Admin Products';
                         </svg>
                     </div>
                 </div>
-                
-                <a href="/admin/products/add" class="inline-flex items-center px-5 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-accent-hover))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--color-accent))] transition-all duration-200 transform hover:-translate-y-0.5">
+
+                <a href="/admin/products/add" class="btn btn-primary">
                     <svg class="-ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
@@ -99,7 +99,7 @@ $title = $title ?? 'Admin Products';
         </div>
 
         <!-- Products Grid -->
-        <?php 
+        <?php
         // Include the products grid component
         $productsGridVars = [
             'products' => $products,
@@ -111,7 +111,7 @@ $title = $title ?? 'Admin Products';
         extract($productsGridVars);
         include __DIR__ . '/../components/products_grid.php';
         ?>
-        
+
         <!-- Empty State with Add Product Button -->
         <?php if (empty($products)): ?>
             <div class="text-center py-16 bg-[rgb(var(--color-surface))] rounded-lg shadow border border-[rgb(var(--color-border))]">
