@@ -38,7 +38,7 @@
     <?php
     $collections = $featuredCollections;
     $title = 'Shop by Collection';
-    $viewAllUrl = '/collections';
+    $viewAllUrl = '/products';
     include __DIR__ . '/components/collections_grid.php';
     unset($collections, $title, $viewAllUrl);
     ?>
@@ -50,7 +50,7 @@
     $products = $newArrivals;
     $title = 'New Arrivals';
     $subtitle = 'Discover our latest additions';
-    $viewAllUrl = '/new-arrivals';
+    $viewAllUrl = '/products';
     include __DIR__ . '/components/products_grid.php';
     unset($products, $title, $subtitle, $viewAllUrl);
     ?>

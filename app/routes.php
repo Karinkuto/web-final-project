@@ -14,6 +14,7 @@ $router->post('/login', 'LoginController@showLoginForm');
 $router->get('/logout', 'LoginController@logout');
 $router->get('/admin', 'AdminController@dashboard');
 $router->get('/admin/products', 'AdminController@productList');
+$router->post('/admin/products/add', 'AdminController@addProduct');
 $router->get('/admin/products/add', 'AdminController@addProduct');
 $router->get('/admin/products/edit/{:id}', 'AdminController@editProduct');
 $router->post('/admin/products/edit/{:id}', 'AdminController@editProduct');

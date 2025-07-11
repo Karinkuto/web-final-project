@@ -14,17 +14,17 @@ class Product extends Model {
 
     /**
      * Get featured products
-     * 
+     *
      * @param int $limit Number of products to return
      * @return array
      */
     public function getFeatured($limit = 8) {
         return $this->getFeaturedProducts($limit);
     }
-    
+
     /**
      * Get featured products (alias for getFeatured)
-     * 
+     *
      * @param int $limit Number of products to return
      * @return array
      */
@@ -33,14 +33,14 @@ class Product extends Model {
         $stmt->bindValue(':limit', (int)$limit, \PDO::PARAM_INT);
         $stmt->execute();
         $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
+
         // Format products for the view
         return array_map([$this, 'formatProduct'], $products);
     }
 
     /**
      * Get new arrival products
-     * 
+     *
      * @param int $limit Number of products to return
      * @return array
      */
@@ -49,20 +49,20 @@ class Product extends Model {
         $stmt->bindValue(':limit', (int)$limit, \PDO::PARAM_INT);
         $stmt->execute();
         $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
+
         // Format products for the view
         return array_map([$this, 'formatProduct'], $products);
     }
 
     /**
      * Convert database row to the format expected by our views
-     * 
+     *
      * @param array $product The product data from the database
      * @return array Formatted product data
      */
     /**
      * Get the count of products in a specific category
-     * 
+     *
      * @param string $categorySlug The category slug to count products for
      * @return int The number of products in the category
      */
@@ -71,19 +71,19 @@ class Product extends Model {
         $stmt->bindValue(':category', $categorySlug, \PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        
+
         return (int)($result['count'] ?? 0);
     }
 
     /**
      * Convert database row to the format expected by our views
-     * 
+     *
      * @param array $product The product data from the database
      * @return array Formatted product data
      */
     public function formatProduct($product) {
         $name = $product['name'] ?? '';
-        
+
         return [
             'id' => $product['id'] ?? null,
             // Keep both 'name' and 'title' for backward compatibility
@@ -102,7 +102,6 @@ class Product extends Model {
             'variants' => !empty($product['variants']) ? (is_array($product['variants']) ? $product['variants'] : json_decode($product['variants'], true)) : [],
             'created_at' => $product['created_at'] ?? null,
             // Add any additional fields that might be needed
-            'brand' => $product['brand'] ?? '',
             'materials' => !empty($product['materials']) ? (is_array($product['materials']) ? $product['materials'] : json_decode($product['materials'], true)) : [],
             'sizes' => !empty($product['sizes']) ? (is_array($product['sizes']) ? $product['sizes'] : json_decode($product['sizes'], true)) : []
         ];

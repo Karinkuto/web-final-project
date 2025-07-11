@@ -18,9 +18,9 @@
         <!-- Image gallery -->
         <div class="product-gallery-container">
             <div class="product-gallery">
-                <img id="main-image" 
-                     src="<?= htmlspecialchars(is_array($product['image_url'] ?? '') ? $product['image_url'][0] : ($product['image_url'] ?? '/images/placeholder.jpg')) ?>" 
-                     alt="<?= htmlspecialchars($product['name']) ?>" 
+                <img id="main-image"
+                     src="<?= htmlspecialchars(is_array($product['image_url'] ?? '') ? $product['image_url'][0] : ($product['image_url'] ?? '/images/placeholder.jpg')) ?>"
+                     alt="<?= htmlspecialchars($product['name']) ?>"
                      class="product-image"
                      loading="eager">
             </div>
@@ -33,8 +33,8 @@
                             role="tab"
                             aria-selected="<?= $index === 0 ? 'true' : 'false' ?>"
                             tabindex="<?= $index === 0 ? '0' : '-1' ?>">
-                            <img src="<?= htmlspecialchars($image) ?>" 
-                                 alt="" 
+                            <img src="<?= htmlspecialchars($image) ?>"
+                                 alt=""
                                  class="product-thumbnail-img">
                         </button>
                     <?php endforeach; ?>
@@ -49,14 +49,14 @@
                 <?php if (!empty($product['is_new'])): ?>
                     <span class="product-badge">New Arrival</span>
                 <?php endif; ?>
-                
+
                 <h1 class="product-title"><?= htmlspecialchars($product['name']) ?></h1>
-                
-                <?php if (!empty($product['brand'])): ?>
+
+                <?php /* if (!empty($product['brand'])): ?>
                     <p class="product-brand">By <?= htmlspecialchars($product['brand']) ?></p>
-                <?php endif; ?>
+                <?php endif; */ ?>
             </div>
-            
+
             <!-- Price -->
             <div class="mb-6">
                 <p class="product-price">$<?= number_format($product['price'], 2) ?></p>
@@ -88,28 +88,28 @@
                             <?php
                             $colors = is_string($product['colors'] ?? '') ? json_decode($product['colors'], true) : ($product['colors'] ?? []);
                             if (is_array($colors) && !empty($colors)) {
-                                foreach ($colors as $index => $color): 
+                                foreach ($colors as $index => $color):
                                     $colorValue = is_array($color) ? ($color['value'] ?? '') : $color;
                                     $colorName = is_array($color) ? ($color['name'] ?? '') : $color;
                                     $isWhite = is_string($colorName) && (stripos($colorName, 'white') !== false || $colorValue === '#ffffff' || $colorValue === '#fff');
                             ?>
                                 <label class="color-option relative -m-0.5 flex items-center justify-center rounded-full p-0.5 focus:outline-none">
-                                    <input type="radio" 
-                                           name="color-choice" 
-                                           value="<?= htmlspecialchars($colorValue) ?>" 
-                                           class="sr-only" 
-                                           <?= $index === 0 ? 'checked' : '' ?> 
+                                    <input type="radio"
+                                           name="color-choice"
+                                           value="<?= htmlspecialchars($colorValue) ?>"
+                                           class="sr-only"
+                                           <?= $index === 0 ? 'checked' : '' ?>
                                            aria-labelledby="color-choice-<?= $index ?>-label">
                                     <span id="color-choice-<?= $index ?>-label" class="sr-only">
                                         <?= htmlspecialchars($colorName) ?>
                                     </span>
-                                    <span class="color-swatch <?= $isWhite ? 'color-swatch-white' : '' ?>" 
+                                    <span class="color-swatch <?= $isWhite ? 'color-swatch-white' : '' ?>"
                                           style="background-color: <?= $colorValue ?>"
                                           aria-hidden="true"
                                           title="<?= htmlspecialchars($colorName) ?>">
                                     </span>
                                 </label>
-                            <?php 
+                            <?php
                                 endforeach;
                             }
                             ?>
@@ -127,10 +127,10 @@
                             <div class="variant-options">
                                 <?php foreach ($product['materials'] as $material): ?>
                                     <label class="material-option">
-                                        <input type="radio" 
-                                               name="material" 
-                                               value="<?= htmlspecialchars($material['value']) ?>" 
-                                               class="sr-only" 
+                                        <input type="radio"
+                                               name="material"
+                                               value="<?= htmlspecialchars($material['value']) ?>"
+                                               class="sr-only"
                                                <?= $material === ($product['materials'][0] ?? null) ? 'checked' : '' ?>>
                                         <span class="material-label">
                                             <?= htmlspecialchars($material['name']) ?>
@@ -150,10 +150,10 @@
                             <div class="grid grid-cols-4 gap-3">
                                 <?php foreach ($product['sizes'] as $size): ?>
                                     <label class="size-option">
-                                        <input type="radio" 
-                                               name="size" 
-                                               value="<?= htmlspecialchars($size) ?>" 
-                                               class="sr-only" 
+                                        <input type="radio"
+                                               name="size"
+                                               value="<?= htmlspecialchars($size) ?>"
+                                               class="sr-only"
                                                <?= $size === ($product['sizes'][0] ?? null) ? 'checked' : '' ?>>
                                         <span><?= htmlspecialchars($size) ?></span>
                                     </label>
@@ -168,22 +168,22 @@
             <div class="mt-6">
                 <label for="quantity" class="variant-label">Quantity</label>
                 <div class="quantity-selector mt-1">
-                    <button type="button" 
-                            onclick="decrementQuantity()" 
+                    <button type="button"
+                            onclick="decrementQuantity()"
                             class="quantity-btn"
                             aria-label="Decrease quantity">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                         </svg>
                     </button>
-                    <input type="number" 
-                           id="quantity" 
-                           name="quantity" 
-                           min="1" 
-                           value="1" 
+                    <input type="number"
+                           id="quantity"
+                           name="quantity"
+                           min="1"
+                           value="1"
                            class="quantity-input">
-                    <button type="button" 
-                            onclick="incrementQuantity()" 
+                    <button type="button"
+                            onclick="incrementQuantity()"
                             class="quantity-btn"
                             aria-label="Increase quantity">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +203,7 @@
             <!-- Product Information Tabs -->
             <div class="product-tabs mt-12 border-t border-gray-200 pt-6">
                 <div class="product-tabs-nav flex border-b border-gray-200 mb-6" role="tablist" aria-label="Product information">
-                    <button type="button" 
+                    <button type="button"
                             role="tab"
                             id="description-tab"
                             aria-controls="description-panel"
@@ -214,7 +214,7 @@
                         Description
                     </button>
                     <?php if (!empty($product['materials']) || !empty($product['dimensions'])): ?>
-                        <button type="button" 
+                        <button type="button"
                                 role="tab"
                                 id="specs-tab"
                                 aria-controls="specs-panel"
@@ -226,7 +226,7 @@
                         </button>
                     <?php endif; ?>
                     <?php if (!empty($product['dimensions'])): ?>
-                        <button type="button" 
+                        <button type="button"
                                 role="tab"
                                 id="dimensions-tab"
                                 aria-controls="dimensions-panel"
@@ -236,7 +236,7 @@
                         </button>
                     <?php endif; ?>
                     <?php if (!empty($product['materials_description']) || !empty($product['care_instructions'])): ?>
-                        <button type="button" 
+                        <button type="button"
                                 role="tab"
                                 id="materials-tab"
                                 aria-controls="materials-panel"
@@ -248,7 +248,7 @@
                 </div>
                 <div class="product-tab-panels">
                     <!-- Description -->
-                    <div id="description-panel" 
+                    <div id="description-panel"
                          role="tabpanel"
                          aria-labelledby="description-tab"
                          class="product-tab-panel active py-6">
@@ -258,7 +258,7 @@
                     </div>
 
                     <!-- Specifications -->
-                    <div id="specs-panel" 
+                    <div id="specs-panel"
                          role="tabpanel"
                          aria-labelledby="specs-tab"
                          class="product-tab-panel py-6"
@@ -267,7 +267,7 @@
                             <div class="mb-6">
                                 <h4 class="text-lg font-medium mb-2">Materials</h4>
                                 <p class="text-gray-700">
-                                    <?php 
+                                    <?php
                                     $materials = is_string($product['materials']) ? json_decode($product['materials'], true) : $product['materials'];
                                     if (is_array($materials) && isset($materials[0]['name'])) {
                                         echo htmlspecialchars(implode(', ', array_column($materials, 'name')));
@@ -280,7 +280,7 @@
                                 </p>
                             </div>
                         <?php endif; ?>
-                        
+
                         <?php if (!empty($product['dimensions'])): ?>
                             <div class="mb-6">
                                 <h4 class="text-lg font-medium mb-2">Dimensions</h4>
@@ -291,14 +291,14 @@
 
                     <!-- Dimensions -->
                     <?php if (!empty($product['dimensions'])): ?>
-                        <div id="dimensions-panel" 
+                        <div id="dimensions-panel"
                              role="tabpanel"
                              aria-labelledby="dimensions-tab"
                              class="product-tab-panel">
                             <div class="space-y-4">
                                 <div class="aspect-w-1 aspect-h-1 w-full max-w-md">
-                                    <img src="<?= $product['dimensions_image'] ?? '/path/to/default-dimensions.jpg' ?>" 
-                                         alt="<?= htmlspecialchars($product['name']) ?> dimensions" 
+                                    <img src="<?= $product['dimensions_image'] ?? '/path/to/default-dimensions.jpg' ?>"
+                                         alt="<?= htmlspecialchars($product['name']) ?> dimensions"
                                          class="w-full h-full object-contain">
                                 </div>
                                 <dl class="grid grid-cols-2 gap-4">
@@ -315,7 +315,7 @@
 
                     <!-- Materials & Care -->
                     <?php if (!empty($product['materials_description']) || !empty($product['care_instructions'])): ?>
-                        <div id="materials-panel" 
+                        <div id="materials-panel"
                              role="tabpanel"
                              aria-labelledby="materials-tab"
                              class="product-tab-panel">
@@ -323,7 +323,7 @@
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-900 mb-2">Materials</h4>
                                     <p class="text-sm text-gray-600"><?= $product['materials_description'] ?? 'High-quality materials designed for durability and comfort.' ?></p>
-                                    
+
                                     <?php if (!empty($product['care_instructions'])): ?>
                                         <div class="mt-4">
                                             <h4 class="text-sm font-medium text-gray-900 mb-2">Care Instructions</h4>
@@ -374,7 +374,7 @@
             firstThumbnail.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
         }
     });
-    
+
     function changeMainImage(src, thumbnail) {
         // Update main image
         const mainImage = document.getElementById('main-product-image');
@@ -385,17 +385,17 @@
                 mainImage.style.opacity = '1';
             }, 150);
         }
-        
+
         // Update active thumbnail
         document.querySelectorAll('[data-thumbnail]').forEach(thumb => {
             thumb.classList.remove('ring-2', 'ring-primary', 'ring-offset-2');
         });
-        
+
         if (thumbnail) {
             thumbnail.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
         }
     }
-    
+
     // Initialize first tab as active
     document.addEventListener('DOMContentLoaded', function() {
         switchTab('description-panel', document.querySelector('.product-tab-btn'));
@@ -404,12 +404,12 @@
     // Image gallery functionality
     function changeImage(src, clickedElement) {
         if (!clickedElement) return;
-        
+
         const mainImage = document.getElementById('main-image');
         if (mainImage) {
             // Add fade out effect
             mainImage.style.opacity = '0';
-            
+
             // Wait for fade out to complete before changing image
             setTimeout(() => {
                 mainImage.src = src;
@@ -419,7 +419,7 @@
                 }, 50);
             }, 200);
         }
-        
+
         // Update active thumbnail
         const thumbnails = document.querySelectorAll('.product-thumbnail-btn');
         thumbnails.forEach(thumb => {
@@ -437,7 +437,7 @@
     function updateQuantity(change) {
         const quantityInput = document.getElementById('quantity');
         if (!quantityInput) return;
-        
+
         let newValue = parseInt(quantityInput.value) + change;
         if (newValue < 1) newValue = 1;
         if (newValue > 99) newValue = 99;
@@ -456,28 +456,28 @@
     function setupTabs() {
         const tabs = document.querySelectorAll('.product-tab-btn');
         const panels = document.querySelectorAll('.product-tab-panel');
-        
+
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const panelId = tab.getAttribute('aria-controls');
                 const panel = document.getElementById(panelId);
-                
+
                 if (!panel) return;
-                
+
                 // Update active tab
                 tabs.forEach(t => {
                     t.classList.remove('active');
                     t.setAttribute('aria-selected', 'false');
                 });
-                
+
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
-                
+
                 // Show active panel
                 panels.forEach(p => {
                     p.classList.remove('active');
                 });
-                
+
                 panel.classList.add('active');
             });
         });
@@ -494,10 +494,10 @@
                 thumbnails[0].setAttribute('aria-selected', 'true');
             }
         }
-        
+
         // Initialize tabs
         setupTabs();
-        
+
         // Keyboard navigation for thumbnails
         thumbnails.forEach((thumb, index) => {
             thumb.addEventListener('keydown', (e) => {

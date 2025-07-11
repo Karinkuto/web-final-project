@@ -21,7 +21,7 @@ class HomeController extends Controller
 
         // Get new arrivals (latest products)
         $newArrivals = $this->productModel->getNewArrivals(8);
-        
+
         // Get featured products
         $featuredProducts = $this->productModel->getFeatured(8);
 
@@ -54,7 +54,7 @@ class HomeController extends Controller
         ];
 
         $collections = [];
-        
+
         // Get product counts for each category and only include non-empty categories
         foreach ($categories as $slug => $name) {
             $count = $this->productModel->getCountByCategory($slug);
@@ -64,7 +64,7 @@ class HomeController extends Controller
                     'title' => $name,
                     'item_count' => $count,
                     'image_url' => $this->getCategoryImage($slug),
-                    'url' => "/collections/{$slug}"
+                    'url' => "/products/{$slug}"
                 ];
             }
         }
