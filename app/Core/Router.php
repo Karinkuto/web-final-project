@@ -41,8 +41,11 @@ class Router
         $uri = $uri === '' ? '/' : $uri;
 
         foreach ($this->routes as $route) {
-            // Convert route path to regex
-            $pattern = '#^' . preg_replace('/\//', '\/', $route['path']) . '$#';
+            // Convert route path to regex, handling parameters like {id}
+            $pattern = $route['path'];
+            $pattern = preg_replace('/\//', '\/', $pattern); // Escape forward slashes
+            $pattern = preg_replace('/\{:([a-zA-Z]+)\}/', '([^\/]+)', $pattern); // Replace {param} with regex group
+            $pattern = '#^' . $pattern . '$#';
             
             if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
                 // Remove the full match from matches

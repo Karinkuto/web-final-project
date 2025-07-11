@@ -1,0 +1,352 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap');
+
+@layer base {
+  :root {
+    /* Colors - Defined as RGB values */
+    --color-primary: 27 14 14;
+    --color-primary-light: 46 30 30;
+    --color-accent: 234 40 50;
+    --color-accent-hover: 209 31 40;
+    --color-secondary: 153 77 81;
+    --color-background: 252 248 248;
+    --color-surface: 255 255 255;
+    --color-border: 243 231 232;
+
+    /* Typography */
+    --font-sans: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+}
+
+/* Apply custom fonts */
+html {
+  font-family: var(--font-sans);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(153, 77, 81, 0.3);
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .text-primary {
+    color: var(--color-primary);
+  }
+
+  .hover\:text-accent:hover {
+    color: var(--color-accent);
+  }
+
+  .border-border {
+    border-color: var(--color-border);
+  }
+}
+
+/* Button Styles */
+@layer components {
+  /* Form Inputs */
+  .form-input {
+    @apply block w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg
+           focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent
+           transition-colors placeholder-gray-400;
+  }
+
+    /* Card Component */
+  .card {
+    @apply relative;
+  }
+
+  .card-image-container {
+    @apply relative aspect-square w-full overflow-hidden rounded-lg bg-gray-200;
+  }
+
+  .card-image {
+    @apply h-full w-full object-cover object-center transition-opacity duration-300 group-hover:opacity-90;
+  }
+
+  .card-badge {
+    @apply absolute top-2 left-2 flex flex-col gap-1;
+  }
+
+  .badge {
+    @apply text-xs font-bold px-2 py-1 rounded-full;
+  }
+
+  .badge-new {
+    @apply bg-blue-600 text-white;
+  }
+
+  .badge-out-of-stock {
+    @apply bg-gray-600 text-white;
+  }
+
+  .badge-sale {
+    @apply absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full;
+  }
+
+  .card-content {
+    @apply mt-4;
+  }
+
+  .card-category {
+    @apply text-sm text-gray-500;
+  }
+
+  .card-title {
+    @apply mt-1 text-sm font-medium text-gray-900 hover:text-primary transition-colors;
+  }
+
+  .card-price {
+    @apply mt-2 flex items-center;
+  }
+
+  .card-price-current {
+    @apply text-base font-medium text-gray-900;
+  }
+
+  .card-price-original {
+    @apply ml-2 text-sm text-gray-500 line-through;
+  }
+
+  .card-colors {
+    @apply mt-2 flex flex-wrap gap-1;
+  }
+
+  .color-swatch {
+    @apply h-4 w-4 rounded-full border border-gray-300;
+  }
+
+  /* Button styles */
+  .btn {
+    @apply inline-flex rounded-lg items-center justify-center px-8 py-3.5 font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-hover text-white;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border-2 border-accent hover:border-accent text-accent;
+  }
+
+  .btn-secondary {
+    @apply bg-accent/10 text-accent hover:bg-accent/20;
+  }
+
+  /* Product Detail Page */
+  .product-breadcrumb {
+    @apply flex items-center space-x-2 text-sm;
+  }
+
+  .product-breadcrumb a {
+    @apply text-gray-500 hover:text-gray-700 transition-colors;
+  }
+
+  .product-breadcrumb-separator {
+    @apply text-gray-300;
+  }
+
+  .product-breadcrumb-current {
+    @apply text-gray-900 font-medium;
+  }
+
+  /* Image Gallery */
+  .product-gallery {
+    @apply w-full bg-gray-50 rounded-xl overflow-hidden mb-4 aspect-square;
+  }
+
+  .product-image {
+    @apply w-full h-full object-cover transition-opacity duration-300;
+  }
+
+  .product-thumbnails {
+    @apply grid grid-cols-4 gap-3 mt-4;
+  }
+
+  .product-thumbnail-btn {
+    @apply aspect-square w-full rounded-lg overflow-hidden border-2 transition-all duration-200 border-gray-200 hover:border-gray-300;
+  }
+
+  .product-thumbnail-btn[aria-selected="true"] {
+    @apply border-secondary;
+  }
+
+  .product-thumbnail-img {
+    @apply w-full h-full object-cover;
+  }
+
+  /* Product Header */
+  .product-header {
+    @apply mb-4;
+  }
+
+  .product-badge {
+    @apply inline-block bg-secondary text-white text-xs font-medium px-2.5 py-1 rounded-full mb-3;
+  }
+
+  .product-title {
+    @apply text-3xl font-bold text-gray-900 mb-2;
+  }
+
+  .product-brand {
+    @apply text-gray-600 mb-4;
+  }
+
+  /* Price */
+  .product-price {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  .product-original-price {
+    @apply text-sm text-gray-500 line-through;
+  }
+
+  .product-discount-badge {
+    @apply inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800;
+  }
+
+  /* Description */
+  .product-description {
+    @apply text-gray-600 text-sm;
+  }
+
+  /* Variants */
+  .product-variants {
+    @apply space-y-6 mb-8;
+  }
+
+  .variant-label {
+    @apply block text-sm font-medium text-gray-900 mb-2;
+  }
+
+  .variant-options {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .color-option {
+    @apply relative;
+  }
+
+  .color-swatch {
+    @apply h-6 w-6 rounded-full border border-gray-200 cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-secondary/30 transition-all;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .color-swatch-white {
+    @apply border-gray-200;
+  }
+
+  .material-option {
+    @apply relative;
+  }
+
+  .material-label {
+    @apply px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors;
+  }
+
+  .material-option input:checked + .material-label {
+    @apply border-secondary ring-1 ring-secondary;
+  }
+
+  .size-option {
+    @apply relative flex items-center justify-center rounded-lg border py-3 px-2 text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors;
+  }
+
+  .size-option input:checked + span {
+    @apply border-secondary ring-1 ring-secondary;
+  }
+
+  .size-guide-link {
+    @apply text-sm text-gray-500 hover:text-secondary transition-colors;
+  }
+
+  /* Quantity Selector */
+  .quantity-selector {
+    @apply flex items-center ring-1 ring-accent rounded-md w-fit;
+  }
+
+  .quantity-btn {
+    @apply p-2 w-fit;
+  }
+
+  .quantity-input {
+    @apply w-16 text-center bg-transparent border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none;
+  }
+
+  /* Product Tabs */
+  .product-tabs {
+    @apply border-t border-gray-200 pt-8;
+  }
+
+  .product-tabs-nav {
+    @apply border-b border-gray-200 -mb-px flex space-x-8;
+  }
+
+  .product-tab-btn {
+    @apply border-b-2 whitespace-nowrap py-4 px-1 text-sm font-medium;
+  }
+
+  .product-tab-btn.active {
+    @apply border-secondary text-secondary;
+  }
+
+  .product-tab-panel {
+    @apply py-6;
+  }
+
+  .product-tab-panel.active {
+    @apply block;
+  }
+
+  .product-tab-panel:not(.active) {
+    @apply hidden;
+  }
+
+  /* Related Products */
+  .related-products {
+    @apply mt-16 border-t border-gray-200 py-12 px-4 sm:px-0;
+  }
+
+  .related-products-title {
+    @apply text-2xl font-bold text-gray-900;
+  }
+}
+
+/* Responsive adjustments */
+@screen lg {
+  .product-gallery-container {
+    @apply w-1/2;
+  }
+
+  .product-details-container {
+    @apply w-1/2;
+  }
+}
+

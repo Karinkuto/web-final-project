@@ -9,20 +9,21 @@ class Controller
         // Extract data to variables
         extract($data);
         
-        // Start output buffering
-        ob_start();
-        
-        // Include the view file
+        // Include the layout file which will include the view
+        $layoutFile = dirname(__DIR__) . "/views/layouts/app.php";
         $viewFile = dirname(__DIR__) . "/views/{$view}.php";
         
-        if (file_exists($viewFile)) {
-            include $viewFile;
-        } else {
+        if (!file_exists($viewFile)) {
             throw new \Exception("View file {$viewFile} not found");
         }
         
-        // Get the contents of the buffer and clean it
-        return ob_get_clean();
+        // Start output buffering for the view content
+        ob_start();
+        include $viewFile;
+        $content = ob_get_clean();
+        
+        // Include the layout with the content
+        include $layoutFile;
     }
     
     protected function json($data, $statusCode = 200)
