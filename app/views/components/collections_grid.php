@@ -1,7 +1,7 @@
 <?php
 /**
  * Collections Grid Component
- * 
+ *
  * @param array $collections Array of collection data
  * @param string $title Section title
  * @param string $subtitle Section subtitle (optional)
@@ -28,7 +28,12 @@
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($collections as $collection): ?>
-                <?php include __DIR__ . '/collection_card.php'; ?>
+                <?php 
+                // Pass the collection data to the card component
+                $item = $collection;
+                $type = 'collection';
+                include __DIR__ . '/../partials/card.php'; 
+                ?>
             <?php endforeach; ?>
         </div>
     </div>

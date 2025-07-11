@@ -14,7 +14,7 @@
     <!-- Shop Now Button (Top Right) -->
     <div class="relative pt-6 pr-6 md:pt-8 md:pr-8">
         <div class="flex justify-end">
-            <a href="/shop" class="inline-flex items-center justify-center px-8 py-3.5 rounded-md font-medium text-white bg-accent hover:bg-accent-hover transition-colors">
+            <a href="/shop" class="btn btn-primary">
                 Shop Now
             </a>
         </div>
@@ -64,10 +64,10 @@
             Join our community of design enthusiasts and get exclusive access to new arrivals, special offers, and design inspiration.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
-            <a href="/signup" class="px-8 py-3.5 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg text-center transition-colors">
+            <a href="/signup" class="btn btn-primary">
                 Sign Up for Free
             </a>
-            <a href="/shop" class="px-8 py-3.5 bg-transparent border border-primary/20 hover:border-primary/40 text-primary font-medium rounded-lg text-center transition-colors">
+            <a href="/shop" class="btn btn-outline">
                 Shop Now
             </a>
         </div>

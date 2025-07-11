@@ -20,15 +20,21 @@ class AdminController extends Controller
     public function dashboard()
     {
         $this->requireAdmin();
+        $productController = new \App\Controllers\ProductController();
+        $products = $productController->getProducts();
+        
         echo $this->view('admin/dashboard', [
-            'title' => 'Admin Dashboard'
+            'title' => 'Admin Dashboard',
+            'products' => $products
         ]);
     }
 
     public function productList()
     {
         $this->requireAdmin();
-        $products = (new \App\Controllers\ProductController())->products ?? [];
+        $productController = new \App\Controllers\ProductController();
+        $products = $productController->getProducts();
+        
         echo $this->view('admin/product_list', [
             'title' => 'Manage Products',
             'products' => $products

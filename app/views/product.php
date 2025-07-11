@@ -1,41 +1,41 @@
 <div class="container mx-auto px-4 py-8 max-w-7xl">
     <!-- Breadcrumb -->
     <nav class="mb-8" aria-label="Breadcrumb">
-        <ol class="flex items-center space-x-2 text-sm">
-            <li><a href="/" class="text-gray-500 hover:text-gray-700 transition-colors">Home</a></li>
-            <li class="text-gray-300">/</li>
-            <li><a href="/products" class="text-gray-500 hover:text-gray-700 transition-colors">Furniture</a></li>
+        <ol class="product-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="product-breadcrumb-separator">/</li>
+            <li><a href="/products">Furniture</a></li>
             <?php if (!empty($product['category'])): ?>
-                <li class="text-gray-300">/</li>
-                <li><a href="/products?category=<?= urlencode($product['category']) ?>" class="text-gray-500 hover:text-gray-700 transition-colors"><?= htmlspecialchars($product['category']) ?></a></li>
+                <li class="product-breadcrumb-separator">/</li>
+                <li><a href="/products?category=<?= urlencode($product['category']) ?>"><?= htmlspecialchars($product['category']) ?></a></li>
             <?php endif; ?>
-            <li class="text-gray-300">/</li>
-            <li class="text-gray-900 font-medium"><?= htmlspecialchars($product['name']) ?></li>
+            <li class="product-breadcrumb-separator">/</li>
+            <li class="product-breadcrumb-current"><?= htmlspecialchars($product['name']) ?></li>
         </ol>
     </nav>
 
     <div class="flex flex-col lg:flex-row gap-12">
         <!-- Image gallery -->
-        <div class="lg:w-1/2">
-            <div class="w-full bg-gray-50 rounded-xl overflow-hidden mb-4 aspect-square">
+        <div class="product-gallery-container">
+            <div class="product-gallery">
                 <img id="main-image" 
                      src="<?= htmlspecialchars($product['images'][0] ?? '/path/to/placeholder-image.jpg') ?>" 
                      alt="<?= htmlspecialchars($product['name']) ?>" 
-                     class="w-full h-full object-cover transition-opacity duration-300"
+                     class="product-image"
                      loading="eager">
             </div>
             <?php if (count($product['images'] ?? []) > 1): ?>
-                <div class="grid grid-cols-4 gap-3 mt-4">
+                <div class="product-thumbnails">
                     <?php foreach ($product['images'] as $index => $image): ?>
                         <button type="button"
-                            class="aspect-square w-full rounded-lg overflow-hidden border-2 transition-all duration-200 <?= $index === 0 ? 'border-secondary' : 'border-gray-200 hover:border-gray-300' ?>"
+                            class="product-thumbnail-btn <?= $index === 0 ? 'border-secondary' : '' ?>"
                             onclick="changeImage('<?= htmlspecialchars($image) ?>', this)"
                             role="tab"
                             aria-selected="<?= $index === 0 ? 'true' : 'false' ?>"
                             tabindex="<?= $index === 0 ? '0' : '-1' ?>">
                             <img src="<?= htmlspecialchars($image) ?>" 
                                  alt="" 
-                                 class="w-full h-full object-cover">
+                                 class="product-thumbnail-img">
                         </button>
                     <?php endforeach; ?>
                 </div>
@@ -43,54 +43,50 @@
         </div>
 
         <!-- Product details -->
-        <div class="lg:w-1/2">
+        <div class="product-details-container">
             <!-- Product Header -->
-            <div class="mb-4">
+            <div class="product-header">
                 <?php if (!empty($product['is_new'])): ?>
-                    <span class="inline-block bg-secondary text-white text-xs font-medium px-2.5 py-1 rounded-full mb-3">New Arrival</span>
+                    <span class="product-badge">New Arrival</span>
                 <?php endif; ?>
                 
-                <h1 class="text-3xl font-bold text-gray-900 mb-2"><?= htmlspecialchars($product['name']) ?></h1>
+                <h1 class="product-title"><?= htmlspecialchars($product['name']) ?></h1>
                 
                 <?php if (!empty($product['brand'])): ?>
-                    <p class="text-gray-600 mb-4">By <?= htmlspecialchars($product['brand']) ?></p>
+                    <p class="product-brand">By <?= htmlspecialchars($product['brand']) ?></p>
                 <?php endif; ?>
-                
-
             </div>
             
             <!-- Price -->
             <div class="mb-6">
-                <p class="text-2xl font-semibold text-gray-900">$<?= number_format($product['price'], 2) ?></p>
+                <p class="product-price">$<?= number_format($product['price'], 2) ?></p>
                 <?php if (isset($product['original_price']) && $product['original_price'] > $product['price']): ?>
                     <div class="flex items-center gap-2 mt-1">
-                        <span class="text-sm text-gray-500 line-through">$<?= number_format($product['original_price'], 2) ?></span>
-                        <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
+                        <span class="product-original-price">$<?= number_format($product['original_price'], 2) ?></span>
+                        <span class="product-discount-badge">
                             Save <?= number_format((($product['original_price'] - $product['price']) / $product['original_price']) * 100, 0) ?>%
                         </span>
                     </div>
                 <?php endif; ?>
             </div>
 
-
-
             <!-- Description -->
             <div class="mb-6">
-                <h3 class="text-sm font-medium text-gray-900 mb-2">Description</h3>
-                <div class="text-gray-600 text-sm">
+                <h3 class="variant-label">Description</h3>
+                <div class="product-description">
                     <?= nl2br(htmlspecialchars($product['description'])) ?>
                 </div>
             </div>
 
             <!-- Variants -->
             <?php if (!empty($product['colors']) || !empty($product['materials']) || !empty($product['sizes'])): ?>
-                <div class="space-y-6 mb-8">
+                <div class="product-variants">
                     <?php if (!empty($product['colors'])): ?>
                         <div>
-                            <h3 class="text-sm font-medium text-gray-900 mb-2">Color</h3>
-                            <div class="flex flex-wrap gap-2">
+                            <h3 class="variant-label">Color</h3>
+                            <div class="variant-options">
                                 <?php foreach ($product['colors'] as $color): ?>
-                                    <label class="relative">
+                                    <label class="color-option">
                                         <input type="radio" 
                                                name="color" 
                                                value="<?= htmlspecialchars($color['value']) ?>" 
@@ -100,9 +96,8 @@
                                         <span id="color-choice-<?= htmlspecialchars($color['value']) ?>-label" class="sr-only">
                                             <?= htmlspecialchars($color['name']) ?>
                                         </span>
-                                        <span class="h-10 w-10 rounded-md border-2 border-transparent flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-secondary/30 transition-all" 
-                                              style="background-color: <?= $color['value'] ?>;
-                                                     <?= str_contains(strtolower($color['name']), 'white') ? 'border-gray-200' : '' ?>">
+                                        <span class="color-swatch <?= str_contains(strtolower($color['name']), 'white') ? 'color-swatch-white' : '' ?>" 
+                                              style="background-color: <?= $color['value'] ?>">
                                             <span class="sr-only"><?= htmlspecialchars($color['name']) ?></span>
                                         </span>
                                     </label>
@@ -113,16 +108,16 @@
 
                     <?php if (!empty($product['materials'])): ?>
                         <div>
-                            <h3 class="text-sm font-medium text-gray-900 mb-2">Material</h3>
-                            <div class="flex flex-wrap gap-2">
+                            <h3 class="variant-label">Material</h3>
+                            <div class="variant-options">
                                 <?php foreach ($product['materials'] as $material): ?>
-                                    <label class="relative">
+                                    <label class="material-option">
                                         <input type="radio" 
                                                name="material" 
                                                value="<?= htmlspecialchars($material['value']) ?>" 
                                                class="sr-only" 
                                                <?= $material === ($product['materials'][0] ?? null) ? 'checked' : '' ?>>
-                                        <span class="px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors peer-checked:border-secondary peer-checked:ring-1 peer-checked:ring-secondary">
+                                        <span class="material-label">
                                             <?= htmlspecialchars($material['name']) ?>
                                         </span>
                                     </label>
@@ -134,12 +129,12 @@
                     <?php if (!empty($product['sizes'])): ?>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-sm font-medium text-gray-900">Size</h3>
-                                <a href="#" class="text-sm text-gray-500 hover:text-secondary transition-colors">Size guide</a>
+                                <h3 class="variant-label">Size</h3>
+                                <a href="#" class="size-guide-link">Size guide</a>
                             </div>
                             <div class="grid grid-cols-4 gap-3">
                                 <?php foreach ($product['sizes'] as $size): ?>
-                                    <label class="relative flex items-center justify-center rounded-lg border py-3 px-2 text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors has-[:checked]:border-secondary has-[:checked]:ring-1 has-[:checked]:ring-secondary">
+                                    <label class="size-option">
                                         <input type="radio" 
                                                name="size" 
                                                value="<?= htmlspecialchars($size) ?>" 
@@ -156,12 +151,12 @@
 
             <!-- Quantity -->
             <div class="mt-6">
-                <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
-                <div class="mt-1 flex items-center">
+                <label for="quantity" class="variant-label">Quantity</label>
+                <div class="quantity-selector mt-1">
                     <button type="button" 
                             onclick="decrementQuantity()" 
-                            class="p-2 text-gray-600 hover:text-gray-700 focus:outline-none">
-                        <span class="sr-only">Decrease quantity</span>
+                            class="quantity-btn"
+                            aria-label="Decrease quantity">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                         </svg>
@@ -171,11 +166,11 @@
                            name="quantity" 
                            min="1" 
                            value="1" 
-                           class="w-16 text-center border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                           class="quantity-input">
                     <button type="button" 
                             onclick="incrementQuantity()" 
-                            class="p-2 text-gray-600 hover:text-gray-700 focus:outline-none">
-                        <span class="sr-only">Increase quantity</span>
+                            class="quantity-btn"
+                            aria-label="Increase quantity">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -185,43 +180,50 @@
 
             <!-- Add to cart -->
             <div class="mt-8">
-                <button type="submit" 
-                        class="w-full bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary/50">
+                <button type="submit" class="btn btn-primary w-full">
                     Add to bag
                 </button>
             </div>
 
             <!-- Product Information Tabs -->
-            <div class="mt-12 border-t border-gray-200 pt-8">
-                <div class="border-b border-gray-200">
-                    <nav class="-mb-px flex space-x-8" aria-label="Product information">
+            <div class="product-tabs">
+                <div class="product-tabs-nav" role="tablist" aria-label="Product information">
+                    <button type="button" 
+                            role="tab"
+                            id="description-tab"
+                            aria-controls="description-panel"
+                            aria-selected="true"
+                            class="product-tab-btn active">
+                        Description
+                    </button>
+                    <?php if (!empty($product['dimensions'])): ?>
                         <button type="button" 
-                                data-tab="description" 
-                                class="border-b-2 border-secondary text-secondary whitespace-nowrap py-4 px-1 text-sm font-medium">
-                            Description
+                                role="tab"
+                                id="dimensions-tab"
+                                aria-controls="dimensions-panel"
+                                aria-selected="false"
+                                class="product-tab-btn">
+                            Dimensions
                         </button>
-                        <?php if (!empty($product['dimensions'])): ?>
-                            <button type="button" 
-                                    data-tab="dimensions" 
-                                    class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
-                                Dimensions
-                            </button>
-                        <?php endif; ?>
-                        <?php if (!empty($product['materials_description']) || !empty($product['care_instructions'])): ?>
-                            <button type="button" 
-                                    data-tab="materials" 
-                                    class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
-                                Materials & Care
-                            </button>
-                        <?php endif; ?>
-                    </nav>
+                    <?php endif; ?>
+                    <?php if (!empty($product['materials_description']) || !empty($product['care_instructions'])): ?>
+                        <button type="button" 
+                                role="tab"
+                                id="materials-tab"
+                                aria-controls="materials-panel"
+                                aria-selected="false"
+                                class="product-tab-btn">
+                            Materials & Care
+                        </button>
+                    <?php endif; ?>
                 </div>
-
-                <!-- Tab Panels -->
-                <div class="py-6">
+                <div class="product-tab-panels">
                     <!-- Description -->
-                    <div id="description-panel" class="tab-panel active">
-                        <div class="prose prose-sm max-w-none text-gray-600">
+                    <div id="description-panel" 
+                         role="tabpanel"
+                         aria-labelledby="description-tab"
+                         class="product-tab-panel active">
+                        <div class="prose prose-sm max-w-none product-description">
                             <?= nl2br(htmlspecialchars($product['description'] ?? '')) ?>
                             
                             <?php if (!empty($product['features'])): ?>
@@ -241,7 +243,10 @@
 
                     <!-- Dimensions -->
                     <?php if (!empty($product['dimensions'])): ?>
-                        <div id="dimensions-panel" class="tab-panel hidden">
+                        <div id="dimensions-panel" 
+                             role="tabpanel"
+                             aria-labelledby="dimensions-tab"
+                             class="product-tab-panel">
                             <div class="space-y-4">
                                 <div class="aspect-w-1 aspect-h-1 w-full max-w-md">
                                     <img src="<?= $product['dimensions_image'] ?? '/path/to/default-dimensions.jpg' ?>" 
@@ -261,8 +266,11 @@
                     <?php endif; ?>
 
                     <!-- Materials & Care -->
-                    <?php if (!empty($product['materials'])): ?>
-                        <div id="materials-panel" class="tab-panel hidden">
+                    <?php if (!empty($product['materials_description']) || !empty($product['care_instructions'])): ?>
+                        <div id="materials-panel" 
+                             role="tabpanel"
+                             aria-labelledby="materials-tab"
+                             class="product-tab-panel">
                             <div class="space-y-6">
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-900 mb-2">Materials</h4>
@@ -294,18 +302,15 @@
 
     <!-- Related products -->
     <?php if (!empty($relatedProducts)): ?>
-        <section aria-labelledby="related-heading" class="mt-16 border-t border-gray-200 py-12 px-4 sm:px-0">
-            <div class="max-w-7xl mx-auto">
-                <h2 id="related-heading" class="text-2xl font-bold text-gray-900 mb-8">You may also like</h2>
-
-                <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                    <?php foreach ($relatedProducts as $relatedProduct):
-                        // Include the product card partial
-                        $product = $relatedProduct; // Rename for the partial
-                        include __DIR__ . '/partials/product_card.php';
-                    ?>
-                    <?php endforeach; ?>
-                </div>
+        <section aria-labelledby="related-heading" class="related-products">
+            <h2 id="related-heading" class="related-products-title mb-8">You may also like</h2>
+            <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                <?php foreach ($relatedProducts as $relatedProduct):
+                    // Include the product card partial
+                    $product = $relatedProduct; // Rename for the partial
+                    include __DIR__ . '/partials/product_card.php';
+                ?>
+                <?php endforeach; ?>
             </div>
         </section>
     <?php endif; ?>
@@ -333,14 +338,14 @@
         }
         
         // Update active thumbnail
-        const thumbnails = document.querySelectorAll('[role="tab"]');
+        const thumbnails = document.querySelectorAll('.product-thumbnail-btn');
         thumbnails.forEach(thumb => {
             if (thumb === clickedElement) {
-                thumb.classList.remove('border-transparent', 'hover:border-gray-200');
                 thumb.classList.add('border-secondary');
+                thumb.setAttribute('aria-selected', 'true');
             } else {
                 thumb.classList.remove('border-secondary');
-                thumb.classList.add('border-transparent', 'hover:border-gray-200');
+                thumb.setAttribute('aria-selected', 'false');
             }
         });
     }
@@ -366,52 +371,51 @@
 
     // Tab functionality
     function setupTabs() {
-        const tabs = document.querySelectorAll('[data-tab]');
-        const panels = document.querySelectorAll('.tab-panel');
+        const tabs = document.querySelectorAll('.product-tab-btn');
+        const panels = document.querySelectorAll('.product-tab-panel');
         
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
+                const panelId = tab.getAttribute('aria-controls');
+                const panel = document.getElementById(panelId);
+                
+                if (!panel) return;
                 
                 // Update active tab
                 tabs.forEach(t => {
-                    if (t === tab) {
-                        t.classList.add('border-secondary', 'text-secondary');
-                        t.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                    } else {
-                        t.classList.remove('border-secondary', 'text-secondary');
-                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                    }
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
                 });
                 
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                
                 // Show active panel
-                panels.forEach(panel => {
-                    if (panel.id === `${tabId}-panel`) {
-                        panel.classList.remove('hidden');
-                        panel.classList.add('active');
-                    } else {
-                        panel.classList.add('hidden');
-                        panel.classList.remove('active');
-                    }
+                panels.forEach(p => {
+                    p.classList.remove('active');
                 });
+                
+                panel.classList.add('active');
             });
         });
     }
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize first thumbnail as active
-        const firstThumbnail = document.querySelector('[role="tab"]');
-        if (firstThumbnail) {
-            firstThumbnail.classList.remove('border-transparent', 'hover:border-gray-200');
-            firstThumbnail.classList.add('border-secondary');
+        // Initialize first thumbnail as active if not already set
+        const thumbnails = document.querySelectorAll('.product-thumbnail-btn');
+        if (thumbnails.length > 0) {
+            const activeThumbnail = document.querySelector('.product-thumbnail-btn[aria-selected="true"]');
+            if (!activeThumbnail) {
+                thumbnails[0].classList.add('border-secondary');
+                thumbnails[0].setAttribute('aria-selected', 'true');
+            }
         }
         
         // Initialize tabs
         setupTabs();
         
         // Keyboard navigation for thumbnails
-        const thumbnails = document.querySelectorAll('[role="tab"]');
         thumbnails.forEach((thumb, index) => {
             thumb.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {

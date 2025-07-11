@@ -11,12 +11,12 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <!-- Category Tabs -->
                 <div class="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide">
-                    <a href="?" 
+                    <a href="?"
                        class="whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-colors <?= !$active_category ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' ?>">
                         All Products
                     </a>
                     <?php foreach ($categories as $category): ?>
-                        <a href="?category=<?= urlencode($category) ?>" 
+                        <a href="?category=<?= urlencode($category) ?>"
                            class="whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-colors <?= $active_category === $category ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' ?>">
                             <?= htmlspecialchars($category) ?>
                         </a>
@@ -26,7 +26,7 @@
                 <!-- Sort Dropdown -->
                 <div class="mt-4 sm:mt-0">
                     <label for="sort" class="sr-only">Sort</label>
-                    <select id="sort" name="sort" 
+                    <select id="sort" name="sort"
                             onchange="window.location.href = '?sort=' + this.value + '<?= $active_category ? '&category=' . urlencode($active_category) : '' ?>'"
                             class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-base focus:border-secondary focus:outline-none focus:ring-secondary sm:text-sm">
                         <option value="featured" <?= $sort_by === 'featured' ? 'selected' : '' ?>>Featured</option>
@@ -41,10 +41,10 @@
 
         <!-- Product Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <?php 
+            <?php
             // Filter products by category if selected
-            $filteredProducts = $active_category 
-                ? array_filter($products, fn($p) => $p['category'] === $active_category) 
+            $filteredProducts = $active_category
+                ? array_filter($products, fn($p) => $p['category'] === $active_category)
                 : $products;
 
             // Sort products based on selection
@@ -65,9 +65,11 @@
             });
 
             // Display products
-            foreach ($filteredProducts as $product): 
-                include __DIR__ . '/partials/product_card.php';
-            endforeach; 
+            foreach ($filteredProducts as $product):
+                $item = $product;
+                $type = 'product';
+                include __DIR__ . '/partials/card.php';
+            endforeach;
             ?>
         </div>
 
@@ -106,7 +108,7 @@
     </div>
 
     <!-- Mobile filter dialog -->
-    <div x-show="mobileFiltersOpen" 
+    <div x-show="mobileFiltersOpen"
          x-transition:enter="transition-opacity ease-linear duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"

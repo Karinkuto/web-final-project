@@ -6,6 +6,15 @@ use App\Core\Controller;
 
 class ProductController extends Controller
 {
+    /**
+     * Get all products
+     * 
+     * @return array
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
     // Sample furniture product data
     private $products = [
         [
